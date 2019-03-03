@@ -1,9 +1,9 @@
-import com.opencsv.CSVReader;
-import java.io.FileReader;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Scanner;
 
 
 public class FileParser {
@@ -13,24 +13,26 @@ public class FileParser {
 	
 	public FileParser(String ratingsPath, String moviesPath) {
 		//userRating = {userID : {movieID:rating}}
-		CSVReader reader = null;
+		Scanner reader = null;
 		try {
-			reader = new CSVReader(new FileReader(ratingsPath));
+			reader = new Scanner(new File(ratingsPath));
 			String[] line;
 			HashMap<String, String> movieRating;
 			userRating = new HashMap<String, HashMap<String, String>>();
-			line = reader.readNext();
-			while ((line = reader.readNext()) != null) {
+			line = reader.nextLine().split(",");
+			while (reader.hasNextLine()) {
+				line = reader.nextLine().split(",");
 				movieRating = new HashMap<String, String>();
 				movieRating.put(line[1], line[2]);
 				userRating.put(line[0], movieRating);
 				
 			}
 			
-			reader = new CSVReader(new FileReader(ratingsPath));
+			reader = new Scanner(new File(ratingsPath));
 			mIDLookup = new HashMap<String, String>();
-			line = reader.readNext();
-			while ((line = reader.readNext()) != null) {
+			line = reader.nextLine().split(",");
+			while (reader.hasNextLine()) {
+				line = reader.nextLine().split(",");
 				mIDLookup.put(line[0], line[1]);
 			}
 			
