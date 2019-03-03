@@ -73,6 +73,19 @@ public class FrontEnd {
 		
 		return outputStr;
 	}
+	
+	public static void main(String[] args) {
+		FrontEnd fe = new FrontEnd(2);
+		ArrayList<String> args1 = new ArrayList<String>();
+		args1.add("1");
+		System.out.println("Querying all ratings by user 1...");
+		try {
+			System.out.println(fe.query(false, args1, q.ALL_BY_USER, 1));
+		}catch (Exception e) {
+			System.out.println("ERROR");
+			e.printStackTrace();
+		}
+	}
 	/*
 	 *   -- Get user request
 	 *   

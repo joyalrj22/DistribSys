@@ -57,6 +57,7 @@ public class Server implements ServerInterface{
 	}
 	
 	public HashMap<TimeStamp, ArrayList<ArrayList<String>>> sendGossip() throws RemoteException{
+		System.out.println("Sending gossip...");
 		// send updateLog and replicaTS
 		HashMap<TimeStamp, ArrayList<ArrayList<String>>> returnVal =  new HashMap<TimeStamp, ArrayList<ArrayList<String>>>();
 		returnVal.put(replicaTS, updateLog);
@@ -82,7 +83,7 @@ public class Server implements ServerInterface{
 	public void recieveGossip(ArrayList<ArrayList<String>> mLog, TimeStamp mTS, int serverNum) throws RemoteException{
 		tsTable.set(serverNum, mTS);
 		mergeLog(mLog);
-		
+		System.out.println("Receiving gossip from server "+serverNum);
 		
 		// <serverNum, uTS, uOp, uPrev, uID> = updateLog
 		TimeStamp minTS = null;
@@ -97,6 +98,7 @@ public class Server implements ServerInterface{
 			}
 		}
 		
+		System.out.println("Applying update from gossip: "+nextUpdate);
 		update(nextUpdate.get(2).split(","), new TimeStamp(nextUpdate.get(3)), nextUpdate.get(4));
 
 		ListIterator<ArrayList<String>> updateIter = updateLog.listIterator();
@@ -118,6 +120,7 @@ public class Server implements ServerInterface{
 	}
 	
 	public HashMap<TimeStamp, String> singleQuery(ArrayList<String> args, q queryType ,TimeStamp qPrev) throws RemoteException{
+		System.out.println("Recieved Query");
 		for (int i=0; i<valTS.get(serverNum).length(); i++) {
 			if (qPrev.getVal(i) > valTS.get(serverNum).getVal(i)) {
 				HashMap<TimeStamp, ArrayList<ArrayList<String>>> gossip = servers.get(i).sendGossip();
@@ -144,13 +147,14 @@ public class Server implements ServerInterface{
 		}
 		HashMap<TimeStamp, String> out = new HashMap<TimeStamp, String>();
 		out.put(valTS.get(serverNum), queryResult);
+		System.out.println("Query Result: "+out);
 		return out;
 		
 		
 	}
 	
 	public HashMap<TimeStamp, HashMap<String, String>> multiQuery(ArrayList<String> args, q queryType ,TimeStamp qPrev) throws RemoteException{
-		
+		System.out.println("Recieved Query");
 		for (int i=0; i<valTS.get(serverNum).length(); i++) {
 			if (qPrev.getVal(i) > valTS.get(serverNum).getVal(i)) {
 				HashMap<TimeStamp, ArrayList<ArrayList<String>>> gossip = servers.get(i).sendGossip();
@@ -173,11 +177,12 @@ public class Server implements ServerInterface{
 		
 		HashMap<TimeStamp, HashMap<String, String>> out = new HashMap<TimeStamp, HashMap<String, String>>();
 		out.put(valTS.get(serverNum), queryResult);
+		System.out.println("Query Result: "+out);
 		return out;
 	}
 	
 	public TimeStamp update(String[] uOp, TimeStamp uPrev, String uID) throws RemoteException{
-		
+		System.out.println("updating...");
 		for (ArrayList<String> r : updateLog) {
 			if (r.get(4).equals(uID)){
 				return null;
