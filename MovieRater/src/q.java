@@ -1,0 +1,8 @@
+
+public enum q {
+	ALL_BY_USER,
+	ALL_BY_MOVIE,
+	USER_MOVIE,
+	AVG_FOR_USER,
+	AVG_FOR_MOVIE
+}

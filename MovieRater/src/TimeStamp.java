@@ -11,6 +11,17 @@ public class TimeStamp {
 		
 	}
 	
+	public TimeStamp(ArrayList<Integer> values) {
+		vals = values;
+	}
+	
+	public TimeStamp(String values) {
+		String[] strValArray = values.split(",");
+		for (String v: strValArray) {
+			vals.add(Integer.valueOf(v));
+		}
+	}
+	
 	public TimeStamp() {
 		vals = new ArrayList<Integer>();
 	}
@@ -35,7 +46,10 @@ public class TimeStamp {
 		return vals.size();
 	}
 	
-	public boolean isSmaller(TimeStamp ts) {
+	public boolean isSmallerThan(TimeStamp ts) {
+		if (ts == null) {
+			return false;
+		}
 		for (int i=0; i<ts.length(); i++) {
 			if (ts.getVal(i)>=getVal(i)) {
 				return false;
@@ -44,7 +58,10 @@ public class TimeStamp {
 		return true;
 	}
 	
-	public boolean isGreater(TimeStamp ts) {
+	public boolean isGreaterThan(TimeStamp ts) {
+		if (ts == null) {
+			return false;
+		}
 		for (int i=0; i<ts.length(); i++) {
 			if (ts.getVal(i)<=getVal(i)) {
 				return false;
@@ -61,5 +78,15 @@ public class TimeStamp {
 		
 		return clone;
 	}
+	
+	public String toString() {
+		String strRep = "";
+		for (Integer n: vals) {
+			strRep += n.toString() + ",";
+		}
+		return strRep;
+	}
+	
+	
 
 }
