@@ -1,3 +1,4 @@
+import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -15,7 +16,10 @@ public class FrontEnd {
 		prev = new ArrayList<TimeStamp>();
 		servers = new ArrayList<ServerInterface>();
 		try {
-			registry = LocateRegistry.getRegistry("mira1.dur.ac.uk",37001);
+			System.setSecurityManager(
+					new RMISecurityManager());
+			
+			registry = LocateRegistry.getRegistry(37001);
 			for (int i=0; i<numOfServers; i++) {
 				servers.add((ServerInterface) registry.lookup(String.valueOf(i)));
 			}

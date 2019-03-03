@@ -1,6 +1,5 @@
 import java.rmi.registry.Registry;
 import java.rmi.registry.LocateRegistry;
-import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -33,11 +32,13 @@ public class Server implements ServerInterface{
 	private ServerStatus status;
 	
 	public Server(int serverNum, int systemServerNum) {
+		
 		status = ServerStatus.ACTIVE;
 		this.serverNum = serverNum;
 		values = new FileParser("ratings.csv", "movies.csv");
 		try {
-			registry = LocateRegistry.getRegistry("mira1.dur.ac.uk",37001);
+			
+			registry = LocateRegistry.getRegistry(37001);
 			for (int i=0; i<systemServerNum; i++) {
 				
 				if (i==serverNum) {
@@ -228,14 +229,12 @@ public class Server implements ServerInterface{
 	
 	public static void main(String[] args) {
 		
-		if (System.getSecurityManager() == null) {
-			System.setSecurityManager ( new RMISecurityManager() );
-		}
+		
 			
 		try {
 			Server s = new Server(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
 			ServerInterface stub = (ServerInterface) UnicastRemoteObject.exportObject(s,0);
-			Registry registry = LocateRegistry.getRegistry("mira1.dur.ac.uk",370001);
+			Registry registry = LocateRegistry.getRegistry("localhost",370001);
 			registry.bind(String.valueOf(args[0]), stub);
 			ArrayList<ServerInterface> servers = s.getServers();
 			Runnable gossiper = new Runnable() {
